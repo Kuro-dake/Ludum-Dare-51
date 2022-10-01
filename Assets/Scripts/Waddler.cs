@@ -61,7 +61,7 @@ public class Waddler : MonoBehaviour
     public bool blobber = false;
     bool controls_active => true;
     Quaternion orig_rotation;
-
+    public float jump_height_multiplier = 5f;
     void OnWaddleStep(object sender, WaddleManager.OnWaddleStepArgs args)
     {
         if (blobber)
@@ -80,7 +80,7 @@ public class Waddler : MonoBehaviour
         float tr = blobbing ? target_rotation * .5f : target_rotation;
         
         l_pos = rt != null ? rt.anchoredPosition : (Vector2)transform.localPosition; ;
-        l_pos.y = args.sin_t * bheight;
+        l_pos.y = args.sin_t * bheight * (jumping ? jump_height_multiplier: 1f);
         l_pos.x = Mathf.Lerp(orig_x, tx, args.sin_t_half);
 
         transform.localRotation = Quaternion.Lerp(orig_rotation, Quaternion.Euler(Vector3.forward * tr), args.sin_t_half);
@@ -95,6 +95,8 @@ public class Waddler : MonoBehaviour
         }
         
     }
+
+    public bool jumping = false;
     void OnWaddleFinished(object sender, object args)
     {
         blobbing = false;

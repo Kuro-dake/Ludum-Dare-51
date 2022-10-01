@@ -9,7 +9,8 @@ public class BeatTracker : MonoBehaviour
     private int beat_count = 0;
     private float last_beat_time = 0;
     public const float beat_time = .46875f;
-    private AudioSource source => GetComponent<AudioSource>();
+    [SerializeField] private MusicPlayer mp;
+    private float source_time => mp.track_time;
     private int total_count;
     public static int total_beats => inst.total_count;
    
@@ -25,13 +26,13 @@ public class BeatTracker : MonoBehaviour
     void Update()
     {
 
-        if (last_beat_time > source.time)
+        if (last_beat_time > source_time)
         {
             beat_count = 0;
             
         }
         
-        if (source.time > beat_count * beat_time)
+        if (source_time > beat_count * beat_time)
         {
            
             onBeat?.Invoke(this, new OnBeatArgs(total_count, 8));
@@ -40,7 +41,7 @@ public class BeatTracker : MonoBehaviour
 //            Debug.Log(total_count);
         }
 
-        last_beat_time = source.time;
+        last_beat_time = source_time;
     }
     
     

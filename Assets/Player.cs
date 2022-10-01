@@ -23,9 +23,10 @@ public class Player : MonoBehaviour
 
     void OnArrive()
     {
+        waddler.jumping = false;
         if (!landed_on_platform)
         {
-            Die();
+            Fall();
         }
         else
         {
@@ -51,6 +52,8 @@ public class Player : MonoBehaviour
                 {
                     Game.DestroyGlyphs();
                 }
+
+                waddler.jumping = true;
                 Make.The(gameObject).In(BeatTracker.beat_time).MoveTo(move_to_position).
                     then.MakeHappen(OnArrive).Happen();
                 movement_indicator.transform.position = transform.position;
@@ -61,7 +64,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                Die();
+                Fall();
                 Game.DestroyGlyphs();
             }
             
@@ -70,10 +73,20 @@ public class Player : MonoBehaviour
 
     private bool controls_on = true;
     public Waddler waddler => GetComponentInChildren<Waddler>();
-    public void Die()
+    public void Fall()
     {
 //        Debug.Log("Died");
         Game.inst.transform.position = transform.position;
+        
+        Make.The(gameObject).In(.35f).MoveBy(Vector3.down * 2f).RotateBy(270f * Common.EitherOr())
+            .ScaleTo(orig_scale * .4f).then.MakeHappen(() =>
+            {
+                EnvManager.cam_follow_player = false;
+                transform.localRotation = Quaternion.identity;
+                Game.inst.SpawnPlatform(direction.none);
+            }).then
+            .ScaleTo(orig_scale).MoveTo(Game.inst.transform.position).then.MakeHappen(()=>EnvManager.cam_follow_player = true).
+            Happen();
         onFall?.Invoke(this, null);
         
     }
@@ -137,11 +150,11 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(kv.Key))
             {
                 Platform t = Game.GetDirectionPlatform(kv.Value);
-                if (kv.Key == KeyCode.A)
+                if (kv.Key == KeyCode.A || kv.Key == KeyCode.S)
                 {
                     rotation_right = false;
                 }
-                else if (kv.Key == KeyCode.D)
+                else if (kv.Key == KeyCode.D || kv.Key == KeyCode.W)
                 {
                     rotation_right = true;
                 }

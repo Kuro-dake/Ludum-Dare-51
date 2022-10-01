@@ -16,6 +16,7 @@ public class Platform : MonoBehaviour
     {
         BeatTracker.onBeat += OnBeat;
         Player.onFall += OnFall;
+        Game.onGameEnd += OnGameEnd;
         transform.localScale = Vector3.one * .5f;
         GetComponent<SpriteRenderer>().color -= Color.black;
         transform.localPosition += Vector3.down;
@@ -23,6 +24,11 @@ public class Platform : MonoBehaviour
             .Happen();
     }
 
+    void OnGameEnd(object sender, object args)
+    {
+        DestroyPlatform();
+    }
+    
     void OnFall(object sender, object args)
     {
         DestroyPlatform();
@@ -42,7 +48,7 @@ public class Platform : MonoBehaviour
     {
         
     }
-
+    
     public void DestroyPlatform()
     {
         if (is_falling)

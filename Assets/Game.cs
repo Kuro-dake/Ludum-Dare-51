@@ -57,8 +57,11 @@ public class Game : MonoBehaviour
         direction_points.AddRange(_direction_points);
         BeatTracker.onBeat += OnBeat;
         spawn_platform_every_nth_beat = 6;
+        music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
     }
 
+    public static MusicPlayer music_player => FindObjectOfType<MusicPlayer>();
+    
     // Update is called once per frame
     void Update()
     {
@@ -66,6 +69,7 @@ public class Game : MonoBehaviour
     }
 
     public static event System.EventHandler onGlyphVerify;
+    public static event System.EventHandler onGameEnd;
 
     public static Platform next_platform { get; protected set; }
     public static bool first_platform_created { get; protected set; }
@@ -98,7 +102,7 @@ public class Game : MonoBehaviour
         set => inst._game_started = value;
     }
 
-    public static bool countdown_over => start_countdown < 1;
+    public static bool countdown_over => start_countdown < 1 && game_started;
 
     void OnBeat(object sender, OnBeatArgs args)
     {
@@ -173,7 +177,7 @@ public class Game : MonoBehaviour
 
                 if (selected_glyph != required_glyph)
                 {
-                    Player.inst.Die();
+                    Player.inst.Fall();
                 }
                 else
                 {
@@ -193,10 +197,11 @@ public class Game : MonoBehaviour
         onGlyphVerify?.Invoke(null, null);
     }
 
-    Platform SpawnPlatform(direction dir)
+    [SerializeField] private List<Sprite> platform_sprites = new List<Sprite>();
+    public Platform SpawnPlatform(direction dir, int spriteindex = 0)
     {
         Platform ret = Instantiate(platform_prefab);
-
+        ret.GetComponent<SpriteRenderer>().sprite = platform_sprites[spriteindex];
         ret.dir_in = dir;
 
         Vector2 pos = dir == direction.none ? (Vector2)transform.position : (Vector2)GetDirectionTransform(dir).position;
@@ -214,10 +219,18 @@ public class Game : MonoBehaviour
         
     }
 
+    public void EndGame()
+    {
+        game_started = false;
+        DestroyGlyphs();
+        onGameEnd?.Invoke(this, null);
+        first_platform_created = false;
+    }
+
     public void SetStartCountdown()
     {
         int beats_into = BeatTracker.total_beats % 8;
-        start_countdown = beats_into / 2 + 1;
+        start_countdown = 4 - Mathf.FloorToInt((float)(beats_into) / 2);
         game_started = true;
     }
     

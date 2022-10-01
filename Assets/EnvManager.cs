@@ -9,41 +9,45 @@ using IEnumRunner.Transitions;
 public class EnvManager : MonoBehaviour
 {
     // Start is called before the first frame update
+    private static EnvManager inst;
     void Start()
     {
         SC.Initialize();
+        inst = this;
     }
 
     [SerializeField] private CinemachineVirtualCamera vcam, vcam_follow;
     private bool camFollowPlayer;
 
-    private bool cam_follow_player
+    public static bool cam_follow_player
     {
-        get => camFollowPlayer;
+        get => inst.camFollowPlayer;
         set
         {
-            camFollowPlayer = value;
-            vcam.Priority = value ? 0 : 1;
-            vcam_follow.Priority = value ? 1 : 0;
+            inst.camFollowPlayer = value;
+            inst.vcam.Priority = value ? 0 : 1;
+            inst.vcam_follow.Priority = value ? 1 : 0;
         }
     }
     private Player player => Player.inst;
 
-    private Coroutine switch_game_step;
+    private Coroutine switch_game_routine;
     
     public void StartGame()
     {
-        if (switch_game_step != null)
+        if (switch_game_routine != null)
         {
             return;
         }
 
-        switch_game_step = StartCoroutine(StartGameStep());
+        switch_game_routine = StartCoroutine(StartGameStep());
     }
 
     IEnumerator StartGameStep()
     {
-        yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
+        Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic;");
+        
+        yield return Make.The(player).In(3f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
         IEnumerator pfloat = Make.The(player).In(.5f).FixedTransition().MoveBy(Vector2.up * .2f ).Execute();
         
         yield return Game.inst.StartGame();
@@ -56,16 +60,53 @@ public class EnvManager : MonoBehaviour
         
         Game.inst.SetStartCountdown();
         
-        switch_game_step = null;
+        Game.music_player.PlayOnly("fast_drums;fast_bass;fast_base;fast_humm;magic");
+        Player.inst.waddler.blobber = false;
+        switch_game_routine = null;
+        game_started = true;
+
     }
 
+    public void EndGame()
+    {
+        if (switch_game_routine != null)
+        {
+            return;
+        }
+
+        StartCoroutine(EndGameStep());
+    }
+
+    IEnumerator EndGameStep()
+    {
+        Game.inst.EndGame();
+        Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic");
+        cam_follow_player = false;
+        Player.inst.waddler.blobber = true;
+        yield return Make.The(player).In(3f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
+        Game.game_started = false;
+
+        yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.down * 4.1f ).Execute();
+        switch_game_routine = null;
+        game_started = false;
+        Game.music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
+    }
+    
     private bool game_started = false;
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            StartGame();
+            if (!game_started)
+            {
+                StartGame();
+            }
+            else
+            {
+                EndGame();
+            }
+            
         }
     }
 }

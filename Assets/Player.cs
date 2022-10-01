@@ -47,6 +47,10 @@ public class Player : MonoBehaviour
             if (current_direction != direction.none)
             {
                 landed_on_platform = Game.IsPlatformInDirection(current_direction);
+                if (!landed_on_platform)
+                {
+                    Game.DestroyGlyphs();
+                }
                 Make.The(gameObject).In(BeatTracker.beat_time).MoveTo(move_to_position).
                     then.MakeHappen(OnArrive).Happen();
                 movement_indicator.transform.position = transform.position;
@@ -58,18 +62,20 @@ public class Player : MonoBehaviour
             else
             {
                 Die();
+                Game.DestroyGlyphs();
             }
             
         }
     }
 
     private bool controls_on = true;
-
+    public Waddler waddler => GetComponentInChildren<Waddler>();
     public void Die()
     {
 //        Debug.Log("Died");
         Game.inst.transform.position = transform.position;
         onFall?.Invoke(this, null);
+        
     }
 
     //private Platform next_move_to_platform;

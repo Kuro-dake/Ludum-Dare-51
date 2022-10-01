@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using IEnumRunner;
 using IEnumRunner.Transitions;
 using UnityEngine;
@@ -75,7 +76,8 @@ public class GlyphSquare : MonoBehaviour
     private ColorGroups cg => GetComponentInChildren<ColorGroups>();
 
     private Sequence color_change_sequence;
-    
+    private bool mouse_over;
+    public Sprite selected_glyph => mouse_over ? sprite : null;
     private void OnMouseEnter()
     {
         if (disappearing)
@@ -83,7 +85,8 @@ public class GlyphSquare : MonoBehaviour
             return;
         }
         ChangeColor(Color.white);
-        Game.SelectGlyph(glyph_sr.sprite);
+        mouse_over = true;
+        Game.SelectGlyph(this);
     }
     
     private void OnMouseExit()
@@ -92,10 +95,19 @@ public class GlyphSquare : MonoBehaviour
         {
             return;
         }
+
+        mouse_over = false;
         ChangeColor(Color.white - Color.black * .6f);
         
     }
 
+    public void Collect()
+    {
+        glyph_sr.transform.SetParent(null);
+        cg.colors[0].first.Remove(glyph_sr);
+        Make.The(glyph_sr).In(.4f).MoveTo(Player.inst.transform.position).RotateBy(540f * Common.EitherOr()).AlphaTo(0f)
+            .ScaleTo(glyph_sr.transform.localScale * .6f).then.MakeHappen(() => Destroy(glyph_sr.gameObject)).Happen();
+    }
     private Coroutine cc_routine;
     void ChangeColor(Color to)
     {
@@ -124,12 +136,4 @@ public class GlyphSquare : MonoBehaviour
         cc_routine = null;
     }
     
-    private void OnMouseUpAsButton()
-    {
-        if (disappearing)
-        {
-            return;
-        }
-        Game.SelectGlyph(sprite);
-    }
 }

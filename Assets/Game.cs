@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using IEnumRunner;
 using IEnumRunner.Transitions;
 using Unity.Mathematics;
 using UnityEditor.U2D.Sprites;
 using UnityEngine;
 using TMPro;
+
 public class Game : MonoBehaviour
 {
     [SerializeField] private Platform platform_prefab;
@@ -18,16 +21,24 @@ public class Game : MonoBehaviour
     public static Transform GetDirectionTransform(direction dir) => inst.direction_points[dir];
 
     [SerializeField] private List<Sprite> glyph_sprites = new List<Sprite>();
-    
-    public static Platform GetDirectionPlatform(direction dir) => ReferenceEquals(next_platform, null) ? null : (next_platform.dir_in == dir ? next_platform : null);
-    public static bool IsPlatformInDirection(direction dir) => ReferenceEquals(next_platform, null) ? false : next_platform.dir_in == dir;
+
+    public static Platform GetDirectionPlatform(direction dir) => ReferenceEquals(next_platform, null)
+        ? null
+        : (next_platform.dir_in == dir ? next_platform : null);
+
+    public static bool IsPlatformInDirection(direction dir) =>
+        ReferenceEquals(next_platform, null) ? false : next_platform.dir_in == dir;
+
     Pair<direction, Transform> GetRandomDirection() => direction_points.RandomElement();
 
-    
+
     private static int _spawn_platform_every_nth_beat = 0;
     private static int _spawn_platform_every_nth_beat_half = 0;
-    public static int spawn_platform_every_nth_beat_half => _spawn_platform_every_nth_beat_half; 
-    public static int spawn_platform_every_nth_beat { get => _spawn_platform_every_nth_beat;
+    public static int spawn_platform_every_nth_beat_half => _spawn_platform_every_nth_beat_half;
+
+    public static int spawn_platform_every_nth_beat
+    {
+        get => _spawn_platform_every_nth_beat;
         protected set
         {
             _spawn_platform_every_nth_beat = value;
@@ -36,8 +47,9 @@ public class Game : MonoBehaviour
             {
                 throw new Exception("The beat divider has to be an even number");
             }
-        } 
+        }
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,9 +62,9 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    
+
     public static event System.EventHandler onGlyphVerify;
 
     public static Platform next_platform { get; protected set; }
@@ -62,16 +74,21 @@ public class Game : MonoBehaviour
     {
         required_glyph = glyph_sprites.RandomElement();
     }
+
     [SerializeField] private TextMeshProUGUI countdown_text;
     private MakeTransitions cdt_transitions => countdown_text.transform.parent.GetComponent<MakeTransitions>();
     int _start_countdown = 5;
-    public static int start_countdown { get=>inst._start_countdown;
+
+    public static int start_countdown
+    {
+        get => inst._start_countdown;
         protected set
         {
             inst._start_countdown = value;
             inst.countdown_text.text = "" + value;
 
-        } }
+        }
+    }
 
     public bool _game_started;
 
@@ -82,34 +99,30 @@ public class Game : MonoBehaviour
     }
 
     public static bool countdown_over => start_countdown < 1;
+
     void OnBeat(object sender, OnBeatArgs args)
     {
         if (!countdown_over && game_started)
         {
             if (args.GetBeatNumber() % 2 == 0)
             {
-                start_countdown -= 1;                    
+                start_countdown -= 1;
             }
-                
+
             if (start_countdown > 0)
             {
-                cdt_transitions.Trigger("blob");                    
+                cdt_transitions.Trigger("blob");
             }
             else
             {
                 cdt_transitions.Trigger("disappear");
             }
         }
+
         if (args.validator.is_spawn_beat)
         {
             first_platform_created = true;
-            next_platform = Instantiate(platform_prefab);
-
-            var dir = GetRandomDirection();
-
-            next_platform.dir_in = dir.first;
-
-            next_platform.transform.position = dir.second.position;
+            next_platform = SpawnPlatform(GetRandomDirection().first);
             ShowGlyph();
         }
 
@@ -122,7 +135,7 @@ public class Game : MonoBehaviour
             distribute_glyphs.Insert(0, required_glyph);
 
             Queue<Sprite> glyph_queue = new Queue<Sprite>(distribute_glyphs);
-            
+
             List<int> positions = new List<int>() { 0, 1, 2, 3 };
             positions.Shuffle();
             Queue<int> pos_queue = new Queue<int>(positions);
@@ -137,36 +150,78 @@ public class Game : MonoBehaviour
             foreach (int i in positions)
             {
                 GlyphSquare gs = Instantiate(glyphSquare_prefab);
-                
+
                 Sprite used = glyph_queue.Dequeue();
 
                 gs.sprite = used;
-                
+
                 used_glyphs.Add(used);
-                
+
                 gs.transform.SetParent(glyph_parent);
                 gs.transform.localPosition = Vector3.zero;
-                gs.transform.localRotation = Quaternion.Euler(0f,0f,90f * i);
+                gs.transform.localRotation = Quaternion.Euler(0f, 0f, 90f * i);
             }
 
-            
+
         }
 
         if (args.validator.is_glyph_disappear_beat)
         {
-            if (selected_glyph != required_glyph)
+            if (!ReferenceEquals(required_glyph, null))
             {
-                Player.inst.Die();
-            }
 
-            selected_glyph = null;
-            required_glyph = null;
-            onGlyphVerify?.Invoke(this, null);
+
+                if (selected_glyph != required_glyph)
+                {
+                    Player.inst.Die();
+                }
+                else
+                {
+                    selected_glyph_square.Collect();
+                }
+
+                DestroyGlyphs();
+            }
         }
+
+    }
+
+    public static void DestroyGlyphs()
+    {
+        inst.selected_glyph_square = null;
+        inst.required_glyph = null;
+        onGlyphVerify?.Invoke(null, null);
+    }
+
+    Platform SpawnPlatform(direction dir)
+    {
+        Platform ret = Instantiate(platform_prefab);
+
+        ret.dir_in = dir;
+
+        Vector2 pos = dir == direction.none ? (Vector2)transform.position : (Vector2)GetDirectionTransform(dir).position;
+        
+        ret.transform.position = pos;
+        return ret;
+    }
+    public IEnumerator StartGame()
+    {
+        return Make.The(gameObject).MakeHappen(() =>
+            {
+                transform.position = Camera.main.transform.position;
+                SpawnPlatform(direction.none);
+            }).ThenWait(.5f).Execute();
         
     }
 
-    private Transform glyph_parent => Camera.main.transform.Find("glyph_parent");
+    public void SetStartCountdown()
+    {
+        int beats_into = BeatTracker.total_beats % 8;
+        start_countdown = beats_into / 2 + 1;
+        game_started = true;
+    }
+    
+private Transform glyph_parent => Camera.main.transform.Find("glyph_parent");
     private Sprite _required_glyph;
     private Sprite required_glyph
     {
@@ -182,11 +237,12 @@ public class Game : MonoBehaviour
         }
     }
 
-    private Sprite selected_glyph;
-    public static void SelectGlyph(Sprite s)
+    private Sprite selected_glyph =>
+        ReferenceEquals(selected_glyph_square, null) ? null : selected_glyph_square.selected_glyph;
+    private GlyphSquare selected_glyph_square;
+    public static void SelectGlyph(GlyphSquare s)
     {
-        inst.selected_glyph = s;
-        
+        inst.selected_glyph_square = s;
     }
     
     public void SetPosToNextPlatform()

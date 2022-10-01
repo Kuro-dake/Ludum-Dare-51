@@ -27,6 +27,7 @@ public class Waddler : MonoBehaviour
     
     bool left = false, skip;
     public bool inversed { get; protected set; } = false;
+    
     public void Inverse() => inversed = true;
     [SerializeField]
     Vector3 waddle_scale = new Vector3(.95f, 1.05f);
@@ -46,23 +47,27 @@ public class Waddler : MonoBehaviour
             StopCoroutine(finish_routine);
         }
         left = inversed ? !args.left : args.left;
-        if(!controls_active && blobber && blobbers_active)
-        {
-            //GetComponentInParent<MakeTransitions>().Trigger("blob");
-            blobbing = true;
-        }
+        // if(!controls_active && blobber && blobbers_active)
+        // {
+        //     //GetComponentInParent<MakeTransitions>().Trigger("blob");
+        //     blobbing = true;
+        // }
     }
 
     public static bool blobbers_active = true;
     
     bool blobbing = false;
     [SerializeField]
-    bool blobber = false;
+    public bool blobber = false;
     bool controls_active => true;
     Quaternion orig_rotation;
 
     void OnWaddleStep(object sender, WaddleManager.OnWaddleStepArgs args)
     {
+        if (blobber)
+        {
+            return;
+        }
         RectTransform rt = GetComponent<RectTransform>();
         Vector2 l_pos = rt != null ? rt.anchoredPosition : (Vector2)transform.localPosition;
 
@@ -107,10 +112,12 @@ public class Waddler : MonoBehaviour
     {
         float t = 0f;
         orig_rotation = transform.localRotation;
+        Vector3 orig_pos = transform.localPosition;
         while (t < 1f)
         {
             t += Time.deltaTime * 2f;
             transform.localRotation = Quaternion.Lerp(orig_rotation, Quaternion.identity, t);
+            transform.localPosition = Vector3.MoveTowards(orig_pos, Vector3.zero, t);
             yield return null;
         }
         finish_routine = null;

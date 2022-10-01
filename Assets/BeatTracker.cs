@@ -11,6 +11,7 @@ public class BeatTracker : MonoBehaviour
     public const float beat_time = .46875f;
     private AudioSource source => GetComponent<AudioSource>();
     private int total_count;
+    public static int total_beats => inst.total_count;
    
     private static BeatTracker inst;
     void Start()

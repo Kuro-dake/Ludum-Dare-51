@@ -1,3 +1,47 @@
-Math Bunny: I'll be somewhere around here buni.
+Oh! Hello bunny! Long time no see!|mathbuni|
+Hi math bunny!|buni|
+!noflap|
+!arrive|
+!wait|0.8|
+Hi bird!|mathbuni|
+Hi math bunny!|bird|
+Bird please...|buni|
+!flap|
+!sit|
+!wait|0.5|
+Oops... sry...|bird_sit|||0|254|
+Thank you.|buni|
+So what brings you two here?|mathbuni|
+So: I'm having trouble explaining this to bird.|buni|
+You know how when you're doing 'Bunny is going places', and you have to jump between the platforms, and pick the correct vegetables so the spell stays intact.|buni|848|
+Sure.|mathbuni|
+... and you have to dance all the time you're in the 'Bunny-is-going-places-verse'. And you have to jump-dance every ten seconds exactly, because otherwise it dispels and you return to where you started...|buni|848|
+Yeeeeeees...?|mathbuni|
+It's not ten seconds math bunny. It's barely half of a second, if even that.|bird_sit|||0|254|
+Ah! Good thing you came to me then! I'll gladly explain!|mathbuni|
+You see bird, we're talking bunny seconds here! Bunny seconds are much shorter than human or bird seconds.|mathbuni|
+I did the math the other day for another bird friend of mine. You have to jump-dance exactly at 128 human/bird BPM. That means you have to jump-dance precisely every 0.46875 human/bird seconds.|mathbuni|848|
+And 0.46875 human/bird seconds is exactly ten bunny seconds, so that means one bunny second equals zero point zero four six eight seven five human/bird seconds. Are you following me?|mathbuni|848|
+Aaaah... now it makes sense!|bird_sit|||0|254|
+Well ... I mean... kind of?|bird_sit|||0|254| 
+Why does one bunny second equal to 0.046875 human/bird seconds?|bird_sit|||0|254|
+Beats me... I'm not much of a philosopher. I just do the math.|mathbuni|
+Hmmm....|buni|
+Hot bunny is kind of a philosopher. What do you say we go ask Hot bunny?|buni|
+Ooooh! I haven't seen hot bunny in ages! Yeah! Let's go visit hot bunny!|bird_sit|||0|254|
+You going to see hot bunny? Hot bunny is hot!|mathbuni|
+Yeah!|bird_sit|||0|254|
+Yeah! Hot bunny is easily the hottest bunny I know!|buni|
+Say hi to hot bunny for me please!|mathbuni|
+You bet!|buni|
+So, meet you at the hot bunny's place bird?|buni|
+Sure.|bird_sit|||0|254|
+Okay.|buni|
 !music|slow_base;fast_drums;fast_humm;magic;
-Yes math buni. I'm looking forward|buni
+Bye math bunny!|buni|
+Bye bunny! Bye bird!|mathbuni|
+Bye math bunny!|bird_sit|||0|254|
+!leave|
+<size=80%>*shuffles his hands like a maniac*</size>|buni|
+<size=80%>Secret 'Giant Carrot' jutsu:</size>|buni|
+<size=260%>Bunny is going places!</size>|buni|1000|450

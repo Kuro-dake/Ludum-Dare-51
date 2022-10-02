@@ -63,10 +63,19 @@ public class Menu : MonoBehaviour
 
     }
 
+    [SerializeField] private GameObject finalbunidance;
     IEnumerator EndStep()
     {
         panel.alpha = 0f;
         text.alpha = 0f;
+
+        Game.music_player.PlayOnly("fast_drums;fast_humm;fast_bass;fast_base");
+        yield return new WaitForSeconds(1f);
+        finalbunidance.SetActive(true);
+        Player.inst.waddler.blobber = false;
+        
+        yield return new WaitForSeconds(15f);
+        
         yield return Make.The(panel).In(2f).CGAlphaTo(1f).Execute();
         yield return new WaitForSeconds(.5f);
         

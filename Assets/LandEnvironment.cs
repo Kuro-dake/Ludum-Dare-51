@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,21 @@ public class LandEnvironment : MonoBehaviour
     public int level_moves = 10;
     public Transform bunni_point;
     public int glyphs = 2;
+
+    public Transform bird_float_point;
+    public Transform bird_sit_point;
+
+    private void Start()
+    {
+        foreach (Transform t in new Transform[] { bird_float_point, bird_sit_point, bunni_point })
+        {
+            if (t != null && t.GetComponent<SpriteRenderer>() != null)
+            {
+                t.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+        
+    }
 
     public string next_dialogue
     {

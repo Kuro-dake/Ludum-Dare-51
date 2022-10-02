@@ -1,2 +1,11 @@
-Hoooray! I'm home!|buni
+!arrive|
+So... that's taken care of|bird|
+Yeah...|buni|
+What now?|bird|
+End the game I gues...|buni|
+...|buni|
+You know what would be really cringe?|buni|
+What?|bird|
+If all the bunnies just appeared and started dancing.|buni|
+oh no...|bird|
 !end|

@@ -60,7 +60,7 @@ public class Game : MonoBehaviour
         BeatTracker.onBeat += OnBeat;
         spawn_platform_every_nth_beat = 6;
         
-        music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
+        music_player.PlayOnly("slow_base;slow_bass;slow_drums;slow_oboe;slow_squeak;magic");
         
     }
     

@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private bool _rotation_right = true;
     private Sequence rotation_sequence;
-    private bool rotation_right
+    public bool rotation_right
     {
         get => _rotation_right;
         set

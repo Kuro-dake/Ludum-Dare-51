@@ -1,1 +1,37 @@
-darkness.txt
+Hello dark bunny.|buni|
+!arrive|
+!wait|0.6|
+Hi dark bunny.|bird|
+Oh! hey bunny! hey bird! how's life? I mean - except very very short. Haha|mathbuni|
+sorry. a little creator humor.|mathbuni|
+So, what can i do for you two?|mathbuni|
+well... you know, don't you? you know everything.|buni|
+well, yes. but it's good manners to ask anyway.|mathbuni|
+so... 0.046875 bird/human seconds, right?|mathbuni|
+yes sir!|bird|
+i don't want to to dissapoint you, but it's a very arbitrary thing.|mathbuni|
+you see, when I was creating the 'Bunny-is-going-places-verse', i liked a certain rhythm.|mathbuni|
+but they said: "it has to be every ten seconds"|mathbuni|
+and I was like "the hell it has to"|mathbuni|
+so i created a bunny second|mathbuni|
+really? that's it?|buni|
+yes.|mathbuni|
+...|bird|
+...|buni|
+...|mathbuni|
+well, anyway, sorry to bother you. we'll be going then|buni|
+!music|slow_base;fast_drums;fast_humm;magic;
+no problem! come any time|mathbuni|
+meet you at the giant carrot bird?|buni|
+sure.|bird|
+see you later dark bunny!|buni|
+bye bunny! bye bird!|mathbuni|
+bye dark bunny|bird|
+!leave|
+...|buni|
+Go on. I don't mind.|mathbuni|
+Thank you.|buni|
+any time.|mathbuni|
+<size=80%>*shuffles his hands like a maniac*</size>|buni|
+<size=80%>Secret 'Giant Carrot' jutsu:</size>|buni|
+<size=260%>Bunny is going places!</size>|buni|1000|450

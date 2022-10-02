@@ -21,11 +21,13 @@ public class EnvManager : MonoBehaviour
         Game.onDestinationReached += OnDestinationReached;
         environments.ForEach(e=>e.gameObject.SetActive(false));
         current_environment.gameObject.SetActive(true);
+        Bird.inst.ResetBird();
     }
 
     void OnDestinationReached(object sender, object args)
     {
         current_environment_index++;
+        Bird.inst.transform.position = new Vector2(13.189f, 8.59f);
         EndGame();
     }
     
@@ -76,7 +78,7 @@ public class EnvManager : MonoBehaviour
         Game.inst.StartGame();
         
         yield return new WaitForSeconds(.3f);
-        yield return Make.The(game_mask).In(.4f).ScaleTo(31f).Execute();
+        yield return Make.The(game_mask).In(.4f).ScaleTo(36f).Execute();
         current_environment.gameObject.SetActive(false);
         //yield return new WaitForSeconds(1f);
         // .4f
@@ -97,6 +99,7 @@ public class EnvManager : MonoBehaviour
 
     public void EndGame()
     {
+        Bird.inst.ResetBird();
         if (switch_game_routine != null)
         {
             return;
@@ -107,12 +110,13 @@ public class EnvManager : MonoBehaviour
 
     public static LandEnvironment current_environment => inst.environments[inst.current_environment_index];
     [SerializeField] private List<LandEnvironment> environments;
-    private int current_environment_index = 3;
+    private int current_environment_index = 0;
     
     [SerializeField] private GameObject game_env;
     IEnumerator EndGameStep()
     {
         Game.inst.EndGame();
+        Player.inst.rotation_right = true;
         Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic");
         cam_follow_player = false;
         Player.inst.waddler.blobber = true;
@@ -120,6 +124,7 @@ public class EnvManager : MonoBehaviour
         current_environment.transform.position = (Vector2)Game.inst.transform.position;
         current_environment.gameObject.SetActive(true);
         yield return Make.The(player).In(3f).MoveTo((Vector2)current_environment.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
+        game_mask.transform.position = Player.inst.transform.position;
         yield return Make.The(game_mask).In(.4f).ScaleTo(0f).Execute();
         Game.game_started = false;
 
@@ -155,6 +160,7 @@ public class EnvManager : MonoBehaviour
     [SerializeField] private Dialogues dialogues;
     public void StartEnvironment()
     {
+        Bird.inst.ResetBird();
         dialogues.StartDialogue(current_environment.next_dialogue);
     }
     

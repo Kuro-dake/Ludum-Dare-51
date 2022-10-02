@@ -1,1 +1,39 @@
-hot_island.txt
+Hi hot bunny!|buni|
+Oh! Hey bunny!|mathbuni|
+!arrive|
+!wait|0.6|
+Hi bird!|mathbuni|
+Hi hot bunny!|bird|
+very Nice of you two to visit! How's the giant carrot?|mathbuni|
+Good... good... the view's great as always. How are you?|buni|
+Hot! I am very very hot!|mathbuni|
+Yes! Yes you are! |buni|
+Well... it's kind of my fault. I'm the one living on an island in the middle of an ocean of lava|mathbuni|
+No argument there.|buni|
+Anyway, we came to ask you a question.|buni|
+Shoot!|mathbuni|
+We just came from math bunny's place. He says hi by the way.|bird|
+How nice of him!|mathbuni|
+Anyway, we were talkin about how you have to dance-jump every ten seconds in 'Bunny-is-going-places-verse', and how it was ten bunny seconds, not ten bird/human seconds.|bird|700|
+That is correct.|mathbuni|
+And he told us that one bunny second is 0.046875 bird/human seconds, but couldn't tell us why. So we came to ask you, since you dabble in philosophy.|bird|650|
+Well...|mathbuni|
+I'd say the bunny second is much shorter because bunnies are much faster. But why is it exactly 0.046875 bird/human seconds...|mathbuni|
+I have no idea to be honest. But if you really want to know, you can go ask dark bunny, the creator of the universe.|mathbuni|
+That's an amazing idea! He has to know!|buni|
+Just keep in mind that using 'Bunny is going places' to get to his domain is a lot trickier than usual traveling.|mathbuni|
+Is it?|buni|
+Indeed! Much more difficult. But you'll manage I'm sure.|mathbuni|
+Okay then! Thank you very much for your help hot bunny.|buni|
+See you later hot bunny.|bird|
+!music|slow_base;fast_drums;fast_humm;magic;
+Bye bunny! Bye bird!|mathbuni|
+!leave|
+<size=80%>*shuffles his hands like a maniac*</size>|buni|
+You know you don't have to that to do go places, right?|mathbuni|
+I know, I know. It's just...|buni|
+Don't let me spoil it for you.|mathbuni|
+Nevermind...|buni|
+...|mathbuni|
+...|buni|
+<size=60%>SecretGiantCarrotjutsuBunnyisgoingplaces</size>|buni|

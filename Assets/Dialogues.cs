@@ -126,6 +126,28 @@ public class Dialogues : MonoBehaviour
                     {
                         yield return null;
                     }
+
+                    break;
+                case "noflap":
+                    Bird.inst.flaping = false;
+                    break;
+                case "flap":
+                    Bird.inst.flaping = true;
+                    break;
+                
+                case "wait":
+                    yield return new WaitForSeconds(float.Parse(parameters[0]));
+                    break;
+                
+                case "arrive":
+                    Bird.inst.Arrive();
+                    break;
+                case "leave":
+                    Bird.inst.Leave();
+                    break;
+                case "sit":
+                    Bird.inst.Sit();
+                    break;
             }
         }
         public bool is_command { get; protected set; }

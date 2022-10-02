@@ -1,8 +1,27 @@
-Once upon a time, there was a bunny who lived on The Small Island In The Middle Of The Sea.
-One day he got bored.
-I'm bored|buni|
-And so he decided he'd go visit some friends.
+!noflap|
+!arrive|
+!wait|0.7|
+<i>Once upon a time, there was a bunny who lived atop The Giant Carrot.</i>|bird|
+What are you doing bird?|buni|
+...narrating?|bird|
+I mean the other thing.|buni|
+Flying...?|bird|
+You are not flapping your wings bird.|buni|
+Oh... sry...|bird|
+!flap|
+My bad...|bird|
+You keep doing that, and It's really creepy.|buni|
+<i>Anyway, where was i...? Ah yes! The bunny who lived atop The Giant Carrot.</i>|bird|
+<i>One day, his friend bird, came to visit him to resume a previous debate:</i>|bird|
+So... bunny. how is it every ten seconds again?|bird|
+I have no idea how to explain it to you. Maybe the math bunny would be able to explain it better?|buni|
+Let's go ask him. meet you at his place?|buni|
+Allright then!|bird|
+<i>And so they decided they'd go visit the math bunny.</i>|bird|
 !music|slow_base;fast_drums;fast_humm;magic;
-Using arcane secrets of course.
-<size=80%>Secret \n'The Small Island In The Middle Of The Sea'\n jutsu:</size>|buni|
-<size=260%>Bunny's going places!</size>|buni|1000|450
+<i>of course bird could simply fly there, but how would bunny get to the math bunny's place, which was in the middle of an ocean?</i>|bird|
+<i>Why, by Using his arcane talents of course!</i>|bird|
+<size=80%>*shuffles his hands like a maniac*</size>|buni|
+!leave|
+<size=80%>Secret 'Giant Carrot' jutsu:</size>|buni|
+<size=260%>Bunny is going places!</size>|buni|1000|450

@@ -65,7 +65,8 @@ public class EnvManager : MonoBehaviour
     {
         Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic;");
         // 3f
-        yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
+        yield return Make.The(player).In(1f).MoveTo((Vector2)current_env.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
+        //yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
         // .5f
         Make.The(player).In(.3f).FixedTransition().MoveBy(Vector2.up * .4f).Happen();
         game_env.SetActive(true);

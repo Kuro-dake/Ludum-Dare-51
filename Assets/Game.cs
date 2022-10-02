@@ -262,7 +262,7 @@ public class Game : MonoBehaviour
     }
     public void StartGame()
     {
-        transform.position = EnvManager.current_environment.transform.position;
+        transform.position = Player.inst.transform.position + Vector3.down * .5f;//EnvManager.current_environment.transform.position;
         SpawnPlatform(direction.none, 1);
     }
 

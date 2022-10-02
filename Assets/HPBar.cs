@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ public class HPBar : MonoBehaviour
     void Start()
     {
         BeatTracker.onBeat += OnBeat;
+    }
+
+    private void OnDestroy()
+    {
+        BeatTracker.onBeat -= OnBeat;
     }
 
     [SerializeField] private GameObject indicator_prefab;

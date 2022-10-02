@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using IEnumRunner;
 using IEnumRunner.Transitions;
 using Unity.Mathematics;
-using UnityEditor.U2D.Sprites;
+
 using UnityEngine;
 using TMPro;
 
@@ -59,9 +59,11 @@ public class Game : MonoBehaviour
         direction_points.AddRange(_direction_points);
         BeatTracker.onBeat += OnBeat;
         spawn_platform_every_nth_beat = 6;
+        
         music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
         
     }
+    
 
     public static MusicPlayer music_player => FindObjectOfType<MusicPlayer>();
     
@@ -124,7 +126,7 @@ public class Game : MonoBehaviour
     }
 
     public static bool countdown_over => start_countdown < 1 && game_started;
-
+    public int number_of_glyphs;
     void OnBeat(object sender, OnBeatArgs args)
     {
         if (!countdown_over && game_started)
@@ -182,7 +184,7 @@ public class Game : MonoBehaviour
 
         if (args.validator.is_glyph_beat)
         {
-            int glyph_num = 2;
+            int glyph_num = number_of_glyphs;
             List<Sprite> distribute_glyphs = new List<Sprite>(glyph_sprites);
             distribute_glyphs.Remove(required_glyph);
             distribute_glyphs.Shuffle();
@@ -191,7 +193,18 @@ public class Game : MonoBehaviour
             Queue<Sprite> glyph_queue = new Queue<Sprite>(distribute_glyphs);
 
             List<int> positions = new List<int>() { 0, 1, 2, 3 };
-            positions.Shuffle();
+            int shuffles = 0;
+            while (positions[0] == last_glyph_pos)
+            {
+                positions.Shuffle();
+                if (shuffles++ > 1000)
+                {
+                    throw new Exception("Too many shuffles");
+                }
+            }
+
+            last_glyph_pos = positions[0];
+            
             Queue<int> pos_queue = new Queue<int>(positions);
 
             positions = new List<int>();
@@ -241,6 +254,8 @@ public class Game : MonoBehaviour
 
     }
 
+    private int last_glyph_pos;
+    
     public static void DestroyGlyphs()
     {
         inst.selected_glyph_square = null;
@@ -277,10 +292,13 @@ public class Game : MonoBehaviour
 
     public void SetStartCountdown()
     {
-        int beats_into = BeatTracker.total_beats % 16;
-        start_countdown = 8 - Mathf.FloorToInt((float)(beats_into) / 2);
+        int beat_base = 8;// BeatValidator.GetCurrentValidator(0).beat_base;
+        int beats_into = BeatTracker.total_beats % beat_base * 2;
+        start_countdown = beat_base - Mathf.FloorToInt((float)(beats_into) / 2);
         game_started = true;
-        moves_left = 3;
+        moves_left = EnvManager.current_environment.level_moves;
+        number_of_glyphs = EnvManager.current_environment.glyphs;
+        BeatTracker.tempo = EnvManager.current_environment.tempo;
         ml_transitions.transform.localScale = Vector3.zero;
     }
     

@@ -133,7 +133,7 @@ public class Player : MonoBehaviour
     [SerializeField] private MovementIndicator movement_indicator;
     public float val = .7f, dur = .1f,vy = 1.2f ;
     // Update is called once per frame
-    private bool _rotation_right;
+    private bool _rotation_right = true;
     private Sequence rotation_sequence;
     private bool rotation_right
     {

@@ -13,7 +13,9 @@ public class BeatTracker : MonoBehaviour
     private float source_time => mp.track_time;
     private int total_count;
     public static int total_beats => inst.total_count;
-   
+
+    public static string tempo = "8tempo";
+    
     private static BeatTracker inst;
     void Start()
     {
@@ -35,7 +37,7 @@ public class BeatTracker : MonoBehaviour
         if (source_time > beat_count * beat_time)
         {
            
-            onBeat?.Invoke(this, new OnBeatArgs(total_count, 8));
+            onBeat?.Invoke(this, new OnBeatArgs(total_count));
             beat_count++;
             total_count++;
 //            Debug.Log(total_count);
@@ -50,7 +52,7 @@ public class BeatTracker : MonoBehaviour
 public class OnBeatArgs : System.EventArgs
 {
     protected int beat_number;
-    protected int tempo;
+    
 
     public BeatValidator validator { get; protected set; }
     
@@ -60,9 +62,9 @@ public class OnBeatArgs : System.EventArgs
     }
 
     
-    public OnBeatArgs(int beatNumber, int tempo)
+    public OnBeatArgs(int beatNumber)
     {
         beat_number = beatNumber;
-        validator = BeatValidator.GetValidator(tempo, beatNumber);
+        validator = BeatValidator.GetCurrentValidator(beatNumber);
     }
 }

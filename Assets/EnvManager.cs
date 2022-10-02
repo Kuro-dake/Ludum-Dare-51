@@ -9,7 +9,7 @@ using IEnumRunner.Transitions;
 public class EnvManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    private static EnvManager inst;
+    public static EnvManager inst;
     [SerializeField] private SpriteMask game_mask;
     void Start()
     {
@@ -17,12 +17,15 @@ public class EnvManager : MonoBehaviour
         inst = this;
         //StartGame();
         Player.onFall += OnFall;
-        Player.inst.transform.position = current_env.bunni_point.position;
+        Player.inst.transform.position = current_environment.bunni_point.position;
         Game.onDestinationReached += OnDestinationReached;
+        environments.ForEach(e=>e.gameObject.SetActive(false));
+        current_environment.gameObject.SetActive(true);
     }
 
     void OnDestinationReached(object sender, object args)
     {
+        current_environment_index++;
         EndGame();
     }
     
@@ -63,9 +66,9 @@ public class EnvManager : MonoBehaviour
 
     IEnumerator StartGameStep()
     {
-        Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic;");
+        //Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic;");
         // 3f
-        yield return Make.The(player).In(1f).MoveTo((Vector2)current_env.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
+        yield return Make.The(player).In(1f).MoveTo((Vector2)current_environment.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
         //yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
         // .5f
         Make.The(player).In(.3f).FixedTransition().MoveBy(Vector2.up * .4f).Happen();
@@ -74,7 +77,7 @@ public class EnvManager : MonoBehaviour
         
         yield return new WaitForSeconds(.3f);
         yield return Make.The(game_mask).In(.4f).ScaleTo(31f).Execute();
-        current_env.gameObject.SetActive(false);
+        current_environment.gameObject.SetActive(false);
         //yield return new WaitForSeconds(1f);
         // .4f
         yield return Make.The(player).In(.2f).MoveTo((Vector2)Game.inst.transform.position ).Execute();
@@ -102,8 +105,10 @@ public class EnvManager : MonoBehaviour
         StartCoroutine(EndGameStep());
     }
 
-    public static LandEnvironment current_environment => inst.current_env;
-    [SerializeField] private LandEnvironment current_env;
+    public static LandEnvironment current_environment => inst.environments[inst.current_environment_index];
+    [SerializeField] private List<LandEnvironment> environments;
+    private int current_environment_index = 3;
+    
     [SerializeField] private GameObject game_env;
     IEnumerator EndGameStep()
     {
@@ -112,23 +117,27 @@ public class EnvManager : MonoBehaviour
         cam_follow_player = false;
         Player.inst.waddler.blobber = true;
         Player.inst.hp = -1;
-        current_env.transform.position = (Vector2)Game.inst.transform.position;
-        current_env.gameObject.SetActive(true);
-        yield return Make.The(player).In(3f).MoveTo((Vector2)current_env.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
+        current_environment.transform.position = (Vector2)Game.inst.transform.position;
+        current_environment.gameObject.SetActive(true);
+        yield return Make.The(player).In(3f).MoveTo((Vector2)current_environment.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
         yield return Make.The(game_mask).In(.4f).ScaleTo(0f).Execute();
         Game.game_started = false;
 
-        yield return Make.The(player).In(1f).MoveTo((Vector2)current_env.bunni_point.transform.position ).Execute();
+        yield return Make.The(player).In(1f).MoveTo((Vector2)current_environment.bunni_point.transform.position ).Execute();
         game_env.SetActive(false);
         switch_game_routine = null;
         game_started = false;
         Game.music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
+        yield return new WaitForSeconds(1f);
+        dialogues.StartDialogue(current_environment.next_dialogue);
+
     }
     
     private bool game_started = false;
     // Update is called once per frame
     void Update()
     {
+        return;
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (!game_started)
@@ -141,6 +150,12 @@ public class EnvManager : MonoBehaviour
             }
             
         }
+    }
+
+    [SerializeField] private Dialogues dialogues;
+    public void StartEnvironment()
+    {
+        dialogues.StartDialogue(current_environment.next_dialogue);
     }
     
 }

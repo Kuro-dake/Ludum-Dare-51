@@ -16,9 +16,12 @@ public class MusicPlayer : MonoBehaviour {
 	private Dictionary<string, AudioSource> a_sources_indexed = new Dictionary<string, AudioSource>();
 	private Dictionary<string, float> clips_volumes = new Dictionary<string, float>();
 	public float track_time => tracks[0].time;
+	
 	void Start(){
+		
 		fis_inv = 1f / fade_in_speed;
 		fid_inv = 1f / fade_in_duration;
+		Debug.Log($"sources {a_sources_indexed.Count}");
 		foreach (AudioClip c in clips) {
 			GameObject g = new GameObject ($"track {c.name}", new System.Type[]{ typeof(AudioSource) });
 			g.transform.SetParent (transform);
@@ -34,6 +37,8 @@ public class MusicPlayer : MonoBehaviour {
 			
 			a_sources_indexed.Add(c.name, t);
 			clips_volumes.Add(c.name, 1f);
+			
+			// Debug.Log(c.name);
 
 		}
 		
@@ -69,7 +74,9 @@ public class MusicPlayer : MonoBehaviour {
 		{
 			if (!a_sources_indexed.ContainsKey(kv.Key))
 			{
+				
 				Debug.LogError($"missing track '{kv.Key}'");
+				clips_volumes.ToList().ForEach(_kv=>Debug.Log(_kv.Key));
 			}
 			a_sources_indexed[kv.Key].volume =
 				Mathf.MoveTowards(a_sources_indexed[kv.Key].volume, kv.Value, Time.deltaTime * fid_inv);
@@ -81,7 +88,7 @@ public class MusicPlayer : MonoBehaviour {
 		clips_volumes.ToList().ForEach(kv=>clips_volumes[kv.Key] = 0f);
 		foreach (string clipname in clips.Split(';'))
 		{
-			if (clipname == "")
+			if (clipname.Trim() == "")
 			{
 				continue;
 			}

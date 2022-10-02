@@ -1,0 +1,8 @@
+Once upon a time, there was a bunny who lived on The Small Island In The Middle Of The Sea.
+One day he got bored.
+I'm bored|buni|
+And so he decided he'd go visit some friends.
+!music|slow_base;fast_drums;fast_humm;magic;
+Using arcane secrets of course.
+<size=80%>Secret \n'The Small Island In The Middle Of The Sea'\n jutsu:</size>|buni|
+<size=260%>Bunny's going places!</size>|buni|1000|450

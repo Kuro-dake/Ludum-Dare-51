@@ -40,6 +40,8 @@ public abstract class BeatValidator
     
     public bool is_glyph_beat => glyph_beat && Game.countdown_over && Game.first_platform_created;
     public bool is_glyph_disappear_beat => glyph_disappear_beat && Game.countdown_over && Game.first_platform_created;
+
+    public bool is_last_beat => beat_number % 8 == 7;
     
     protected virtual bool spawn_beat => beat_number % 8 == 0;
     protected abstract bool move_beat { get; }

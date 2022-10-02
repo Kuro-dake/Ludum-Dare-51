@@ -18,6 +18,7 @@ public class Game : MonoBehaviour
     private PairList<direction, Transform> direction_points = new PairList<direction, Transform>();
     
     public static Game inst { get; protected set; }
+    
     public static Transform GetDirectionTransform(direction dir) => inst.direction_points[dir];
 
     [SerializeField] private List<Sprite> glyph_sprites = new List<Sprite>();
@@ -72,6 +73,7 @@ public class Game : MonoBehaviour
 
     public static event System.EventHandler onGlyphVerify;
     public static event System.EventHandler onGameEnd;
+    public static event System.EventHandler onDestinationReached;
 
     public static Platform next_platform { get; protected set; }
     public static bool first_platform_created { get; protected set; }
@@ -81,9 +83,26 @@ public class Game : MonoBehaviour
         required_glyph = glyph_sprites.RandomElement();
     }
 
-    [SerializeField] private TextMeshProUGUI countdown_text;
+    [SerializeField] private TextMeshProUGUI countdown_text, moves_left_text;
     private MakeTransitions cdt_transitions => countdown_text.transform.parent.GetComponent<MakeTransitions>();
+    private MakeTransitions ml_transitions => moves_left_text.transform.parent.GetComponent<MakeTransitions>();
     int _start_countdown = 5;
+    private int _moves_left;
+    private Sequence ml_t_sequence;
+    private int moves_left
+    {
+        get => _moves_left;
+        set
+        {
+            _moves_left = value;
+            moves_left_text.text = $"{moves_left}";
+            if (value < 1)
+            {
+                ml_t_sequence?.Stop();
+                ml_transitions.Trigger("disappear");
+            }
+        }
+    }
 
     public static int start_countdown
     {
@@ -122,14 +141,43 @@ public class Game : MonoBehaviour
             else
             {
                 cdt_transitions.Trigger("disappear");
+                Game.music_player.PlayOnly("fast_drums;fast_humm;fast_bass;fast_base");
             }
         }
 
         if (args.validator.is_spawn_beat)
         {
-            first_platform_created = true;
-            next_platform = SpawnPlatform(GetRandomDirection().first);
-            ShowGlyph();
+            if (first_platform_created && !Player.inst.fallen)
+            {
+                moves_left--;
+                if (moves_left == 24)
+                {
+                    //Game.music_player.PlayOnly("fast_drums;fast_bass;fast_humm;");
+                }
+                if (moves_left == 12)
+                {
+                    //Game.music_player.PlayOnly("fast_drums;fast_bass;fast_base;fast_humm;magic");
+                }
+            }
+
+            if (moves_left < 1)
+            {
+                onDestinationReached?.Invoke(this, null);                           
+            }
+            else
+            {
+                Player.inst.fallen = false;
+                first_platform_created = true;
+                next_platform = SpawnPlatform(GetRandomDirection().first);
+                ShowGlyph();                
+            }
+            
+        }
+        
+        if (moves_left > 0 && game_started && countdown_over)
+        {
+            ml_t_sequence?.Stop();
+            ml_t_sequence = ml_transitions.Trigger("blob");            
         }
 
         if (args.validator.is_glyph_beat)
@@ -188,6 +236,7 @@ public class Game : MonoBehaviour
 
                 DestroyGlyphs();
             }
+            
         }
 
     }
@@ -211,14 +260,10 @@ public class Game : MonoBehaviour
         ret.transform.position = pos;
         return ret;
     }
-    public IEnumerator StartGame()
+    public void StartGame()
     {
-        return Make.The(gameObject).MakeHappen(() =>
-            {
-                transform.position = Camera.main.transform.position;
-                SpawnPlatform(direction.none);
-            }).ThenWait(.5f).Execute();
-        
+        transform.position = EnvManager.current_environment.transform.position;
+        SpawnPlatform(direction.none, 1);
     }
 
     public void EndGame()
@@ -227,13 +272,16 @@ public class Game : MonoBehaviour
         DestroyGlyphs();
         onGameEnd?.Invoke(this, null);
         first_platform_created = false;
+        moves_left = 0;
     }
 
     public void SetStartCountdown()
     {
-        int beats_into = BeatTracker.total_beats % 8;
-        start_countdown = 4 - Mathf.FloorToInt((float)(beats_into) / 2);
+        int beats_into = BeatTracker.total_beats % 16;
+        start_countdown = 8 - Mathf.FloorToInt((float)(beats_into) / 2);
         game_started = true;
+        moves_left = 3;
+        ml_transitions.transform.localScale = Vector3.zero;
     }
     
     private Transform glyph_parent => Camera.main.transform.Find("glyph_parent");

@@ -10,14 +10,22 @@ public class EnvManager : MonoBehaviour
 {
     // Start is called before the first frame update
     private static EnvManager inst;
+    [SerializeField] private SpriteMask game_mask;
     void Start()
     {
         SC.Initialize();
         inst = this;
         //StartGame();
         Player.onFall += OnFall;
+        Player.inst.transform.position = current_env.bunni_point.position;
+        Game.onDestinationReached += OnDestinationReached;
     }
 
+    void OnDestinationReached(object sender, object args)
+    {
+        EndGame();
+    }
+    
     private void OnFall(object sender, object args)
     {
         if (Player.inst.out_of_hp)
@@ -57,12 +65,15 @@ public class EnvManager : MonoBehaviour
     {
         Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic;");
         // 3f
-        yield return Make.The(player).In(.2f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
+        yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
         // .5f
-        IEnumerator pfloat = Make.The(player).In(.2f).FixedTransition().MoveBy(Vector2.up * .2f ).Execute();
+        Make.The(player).In(.3f).FixedTransition().MoveBy(Vector2.up * .4f).Happen();
+        game_env.SetActive(true);
+        Game.inst.StartGame();
         
-        yield return Game.inst.StartGame();
-        yield return pfloat;
+        yield return new WaitForSeconds(.3f);
+        yield return Make.The(game_mask).In(.4f).ScaleTo(31f).Execute();
+        current_env.gameObject.SetActive(false);
         //yield return new WaitForSeconds(1f);
         // .4f
         yield return Make.The(player).In(.2f).MoveTo((Vector2)Game.inst.transform.position ).Execute();
@@ -73,7 +84,7 @@ public class EnvManager : MonoBehaviour
         
         Game.inst.SetStartCountdown();
         
-        Game.music_player.PlayOnly("fast_drums;fast_bass;fast_base;fast_humm;magic");
+        
         Player.inst.waddler.blobber = false;
         switch_game_routine = null;
         game_started = true;
@@ -90,16 +101,24 @@ public class EnvManager : MonoBehaviour
         StartCoroutine(EndGameStep());
     }
 
+    public static LandEnvironment current_environment => inst.current_env;
+    [SerializeField] private LandEnvironment current_env;
+    [SerializeField] private GameObject game_env;
     IEnumerator EndGameStep()
     {
         Game.inst.EndGame();
         Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic");
         cam_follow_player = false;
         Player.inst.waddler.blobber = true;
-        yield return Make.The(player).In(3f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
+        Player.inst.hp = -1;
+        current_env.transform.position = (Vector2)Game.inst.transform.position;
+        current_env.gameObject.SetActive(true);
+        yield return Make.The(player).In(3f).MoveTo((Vector2)current_env.bunni_point.transform.position + Vector2.up * 4.3f ).Execute();
+        yield return Make.The(game_mask).In(.4f).ScaleTo(0f).Execute();
         Game.game_started = false;
 
-        yield return Make.The(player).In(1f).MoveTo((Vector2)Camera.main.transform.position + Vector2.down * 4.1f ).Execute();
+        yield return Make.The(player).In(1f).MoveTo((Vector2)current_env.bunni_point.transform.position ).Execute();
+        game_env.SetActive(false);
         switch_game_routine = null;
         game_started = false;
         Game.music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
@@ -122,4 +141,5 @@ public class EnvManager : MonoBehaviour
             
         }
     }
+    
 }

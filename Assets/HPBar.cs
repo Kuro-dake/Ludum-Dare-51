@@ -35,7 +35,7 @@ public class HPBar : MonoBehaviour
             GetComponentsInChildren<MakeTransitions>().ToList().ForEach(mt=>
             {
                 Transform t = mt.transform.parent;
-                if (!carrot_sent)
+                if (!carrot_sent && value >= 0)
                 {
                     carrot_sent = true;
                     float rot = 540f * Common.EitherOr();

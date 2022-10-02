@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: env
+    uniqueID: 4225212679
+    locked: 0
   - name: Platforms
     uniqueID: 329631957
     locked: 0
@@ -46,9 +49,6 @@ TagManager:
     locked: 0
   - name: glyphs
     uniqueID: 2001019197
-    locked: 0
-  - name: env
-    uniqueID: 4225212679
     locked: 0
   - name: UI
     uniqueID: 1866436405

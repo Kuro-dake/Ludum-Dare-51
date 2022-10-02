@@ -82,8 +82,10 @@ public class Player : MonoBehaviour
 
     private bool controls_on = true;
     public Waddler waddler => GetComponentInChildren<Waddler>();
+    public bool fallen = false;
     public void Fall()
     {
+        fallen = true;
         Debug.Log($"fell at {DateTime.Now.Second}");
         Game.inst.transform.position = transform.position;
         hp--;
@@ -144,11 +146,11 @@ public class Player : MonoBehaviour
             }
             _rotation_right = value;
             rotation_sequence?.Stop();
-            SpriteRenderer sr = transform.Find("bunni").GetComponent<SpriteRenderer>();
+            List<SpriteRenderer> srs = GetComponentsInChildren<SpriteRenderer>().ToList();
 
             Make.The(gameObject).In(dur)
                 .ScaleTo(Common.MultiplyVectorBy(new Vector2(val, vy), orig_scale))
-                .then.MakeHappen(() => sr.flipX = value)
+                .then.MakeHappen(() => srs.ForEach(sr=>sr.flipX = value))
                 .ScaleTo(orig_scale).Happen();
         }
     }

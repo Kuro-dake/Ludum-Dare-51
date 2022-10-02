@@ -9,7 +9,7 @@ public class MusicPlayer : MonoBehaviour {
 	List<AudioSource> tracks = new List<AudioSource>();
 
 	public float fade_in_speed = 10f;
-	public float fade_in_duration => BeatTracker.beat_time * 16; 
+	public float fade_in_duration => BeatTracker.beat_time * 4; 
 	float fis_inv, fid_inv;
 	public float max_volume;
 	public int running = 0;
@@ -45,7 +45,9 @@ public class MusicPlayer : MonoBehaviour {
 	}
 	[SerializeField]
 	float no_game_pitch = .05f, pitch_speed = .2f;
-	IEnumerator SyncTracks(){
+	IEnumerator SyncTracks()
+	{
+		yield break;
 		while(true){
 			yield return new WaitForSeconds (16f);
 			float ftime = tracks [0].time;

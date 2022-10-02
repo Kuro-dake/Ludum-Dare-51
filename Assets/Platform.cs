@@ -11,16 +11,18 @@ public class Platform : MonoBehaviour
     public direction dir_in;
     public Vector3 position => transform.position;
     public bool is_next_platform => this == Game.next_platform;
-    
+
+    private Vector3 orig_scale;
     void Start()
     {
+        orig_scale = transform.localScale;
         BeatTracker.onBeat += OnBeat;
         Player.onFall += OnFall;
         Game.onGameEnd += OnGameEnd;
         transform.localScale = Vector3.one * .5f;
         GetComponent<SpriteRenderer>().color -= Color.black;
         transform.localPosition += Vector3.down;
-        Make.The(gameObject).In(.3f).MoveBy(Vector3.up).ScaleTo(1f).AlphaTo(1f)
+        Make.The(gameObject).In(.3f).MoveBy(Vector3.up).ScaleTo(orig_scale).AlphaTo(1f)
             .Happen();
     }
 

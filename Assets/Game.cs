@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
     [SerializeField] private GlyphSquare glyphSquare_prefab;
     [SerializeField] private List<Pair<direction, Transform>> _direction_points;
     private PairList<direction, Transform> direction_points = new PairList<direction, Transform>();
-    [SerializeField] private SpriteRenderer current_glyph_display;
+    
     public static Game inst { get; protected set; }
     public static Transform GetDirectionTransform(direction dir) => inst.direction_points[dir];
 
@@ -50,6 +50,7 @@ public class Game : MonoBehaviour
         }
     }
 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +59,7 @@ public class Game : MonoBehaviour
         BeatTracker.onBeat += OnBeat;
         spawn_platform_every_nth_beat = 6;
         music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
+        
     }
 
     public static MusicPlayer music_player => FindObjectOfType<MusicPlayer>();
@@ -163,7 +165,7 @@ public class Game : MonoBehaviour
 
                 gs.transform.SetParent(glyph_parent);
                 gs.transform.localPosition = Vector3.zero;
-                gs.transform.localRotation = Quaternion.Euler(0f, 0f, 90f * i);
+                gs.SetRotation(90f * i);
             }
 
 
@@ -234,19 +236,15 @@ public class Game : MonoBehaviour
         game_started = true;
     }
     
-private Transform glyph_parent => Camera.main.transform.Find("glyph_parent");
-    private Sprite _required_glyph;
+    private Transform glyph_parent => Camera.main.transform.Find("glyph_parent");
+    [SerializeField] private RequiredGlyphDisplay glyph_display; 
+    
     private Sprite required_glyph
     {
-        get => _required_glyph;
+        get => glyph_display.sprite;
         set
         {
-            _required_glyph = value;
-            current_glyph_display.sprite = value;
-            if (ReferenceEquals(value, null))
-            {
-                
-            }
+            glyph_display.sprite = value;
         }
     }
 

@@ -14,6 +14,16 @@ public class EnvManager : MonoBehaviour
     {
         SC.Initialize();
         inst = this;
+        //StartGame();
+        Player.onFall += OnFall;
+    }
+
+    private void OnFall(object sender, object args)
+    {
+        if (Player.inst.out_of_hp)
+        {
+            EndGame();
+        }
     }
 
     [SerializeField] private CinemachineVirtualCamera vcam, vcam_follow;
@@ -46,17 +56,20 @@ public class EnvManager : MonoBehaviour
     IEnumerator StartGameStep()
     {
         Game.music_player.PlayOnly("slow_base;fast_drums;slow_oboe;magic;");
-        
-        yield return Make.The(player).In(3f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
-        IEnumerator pfloat = Make.The(player).In(.5f).FixedTransition().MoveBy(Vector2.up * .2f ).Execute();
+        // 3f
+        yield return Make.The(player).In(.2f).MoveTo((Vector2)Camera.main.transform.position + Vector2.up * .4f ).Execute();
+        // .5f
+        IEnumerator pfloat = Make.The(player).In(.2f).FixedTransition().MoveBy(Vector2.up * .2f ).Execute();
         
         yield return Game.inst.StartGame();
         yield return pfloat;
         //yield return new WaitForSeconds(1f);
-        yield return Make.The(player).In(.4f).MoveTo((Vector2)Game.inst.transform.position ).Execute();
-        yield return new WaitForSeconds(.2f);
+        // .4f
+        yield return Make.The(player).In(.2f).MoveTo((Vector2)Game.inst.transform.position ).Execute();
+        //yield return new WaitForSeconds(.2f);
         
         cam_follow_player = true;
+        Player.inst.hp = 3;
         
         Game.inst.SetStartCountdown();
         

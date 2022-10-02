@@ -34,7 +34,7 @@ public class MusicPlayer : MonoBehaviour {
 			
 			a_sources_indexed.Add(c.name, t);
 			clips_volumes.Add(c.name, 1f);
-			Debug.Log(c.name);
+
 		}
 		
 		

@@ -21,6 +21,12 @@ public class GlyphSquare : MonoBehaviour
         }  
     }
 
+    public void SetRotation(float z_rotation)
+    {
+        transform.localRotation = Quaternion.Euler(0f, 0f, z_rotation);
+        glyph_sr.transform.localRotation = Quaternion.Euler(0f, 0f, -z_rotation - 45f);
+    }
+
     [SerializeField] private SpriteRenderer glyph_sr;
     
     // Start is called before the first frame update
@@ -105,8 +111,10 @@ public class GlyphSquare : MonoBehaviour
     {
         glyph_sr.transform.SetParent(null);
         cg.colors[0].first.Remove(glyph_sr);
-        Make.The(glyph_sr).In(.4f).MoveTo(Player.inst.transform.position).RotateBy(540f * Common.EitherOr()).AlphaTo(0f)
-            .ScaleTo(glyph_sr.transform.localScale * .6f).then.MakeHappen(() => Destroy(glyph_sr.gameObject)).Happen();
+        float rotation = 540f * Common.EitherOr();
+        Make.The(glyph_sr).In(.4f).MoveTo(Player.inst.transform.position).RotateBy(rotation).ScaleTo(glyph_sr.transform.localScale * .6f).
+            then.RotateBy(rotation).AlphaTo(0f).ScaleTo(glyph_sr.transform.localScale * .2f).
+            then.MakeHappen(() => Destroy(glyph_sr.gameObject)).Happen();
     }
     private Coroutine cc_routine;
     void ChangeColor(Color to)

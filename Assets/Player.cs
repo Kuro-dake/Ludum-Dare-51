@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,16 @@ public class Player : MonoBehaviour
         BeatTracker.onBeat += OnBeat;
         inst = this;
         orig_scale = transform.localScale;
+        
     }
 
+    public bool out_of_hp => hp < 0; 
+    public int hp
+    {
+        get => hpbar.hp;
+        set => hpbar.hp = value;
+    }
+    [SerializeField]  HPBar hpbar;
     public static event System.EventHandler onFall;
     
     private float mul = 45f / 8f;
@@ -56,7 +65,7 @@ public class Player : MonoBehaviour
                 waddler.jumping = true;
                 Make.The(gameObject).In(BeatTracker.beat_time).MoveTo(move_to_position).
                     then.MakeHappen(OnArrive).Happen();
-                movement_indicator.transform.position = transform.position;
+                movement_indicator.PlaceAt(direction.none);
                 
                 controls_on = false;
                              
@@ -75,18 +84,23 @@ public class Player : MonoBehaviour
     public Waddler waddler => GetComponentInChildren<Waddler>();
     public void Fall()
     {
-//        Debug.Log("Died");
+        Debug.Log($"fell at {DateTime.Now.Second}");
         Game.inst.transform.position = transform.position;
-        
+        hp--;
         Make.The(gameObject).In(.35f).MoveBy(Vector3.down * 2f).RotateBy(270f * Common.EitherOr())
             .ScaleTo(orig_scale * .4f).then.MakeHappen(() =>
             {
-                EnvManager.cam_follow_player = false;
+                //EnvManager.cam_follow_player = false;
                 transform.localRotation = Quaternion.identity;
-                Game.inst.SpawnPlatform(direction.none);
+                if (!out_of_hp)
+                {
+                    Game.inst.SpawnPlatform(direction.none,1);                    
+                }
+                
             }).then
-            .ScaleTo(orig_scale).MoveTo(Game.inst.transform.position).then.MakeHappen(()=>EnvManager.cam_follow_player = true).
+            .ScaleTo(orig_scale).MoveTo(Game.inst.transform.position).then.//MakeHappen(()=>EnvManager.cam_follow_player = true).
             Happen();
+        
         onFall?.Invoke(this, null);
         
     }
@@ -114,7 +128,7 @@ public class Player : MonoBehaviour
         { KeyCode.D, direction.right }
     };
 
-    private Transform movement_indicator => transform.Find("MovementIndicator");
+    [SerializeField] private MovementIndicator movement_indicator;
     public float val = .7f, dur = .1f,vy = 1.2f ;
     // Update is called once per frame
     private bool _rotation_right;
@@ -141,7 +155,7 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        if (!controls_on)
+        if (!controls_on || !Game.game_started)
         {
             return;
         }
@@ -158,7 +172,7 @@ public class Player : MonoBehaviour
                 {
                     rotation_right = true;
                 }
-                movement_indicator.position = Game.GetDirectionTransform(kv.Value).position;
+                movement_indicator.PlaceAt(kv.Value);
                 current_direction = kv.Value;
                 
                 

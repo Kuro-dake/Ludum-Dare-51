@@ -82,9 +82,8 @@ public class Menu : MonoBehaviour
         yield return Make.The(text).In(2f).CGAlphaTo(1f).Execute();
 
         yield return new WaitForSeconds(15f);
-        Game.music_player.PlayOnly("");
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(0);
+        
+        
     }
     void Update()
     {
@@ -110,6 +109,18 @@ public class Menu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Make.The(text).In(.5f).CGAlphaTo(0f).then.MakeHappen(() => active = false).Happen();
+            EnvManager.inst.StartEnvironment();
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Make.The(text).In(.5f).CGAlphaTo(0f).then.MakeHappen(() => active = false).Happen();
+            Game.story_mode = true;
+            EnvManager.inst.environments.ForEach(e=>
+            {
+                e.tempo = "8tempo";
+                e.level_moves = 10;
+            });
             EnvManager.inst.StartEnvironment();
         }
 

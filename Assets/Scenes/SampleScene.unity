@@ -68104,9 +68104,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -69754617
+  m_SortingLayer: -2
+  m_SortingOrder: 100
   m_RenderMode: 0
   m_SortMode: 3
   m_MinParticleSize: 0
@@ -93863,7 +93863,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: press space to start
+  m_text: 'press space to start
+
+
+    press H to start in story mode'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e7c948d60bc756649885610751686142, type: 2}
   m_sharedMaterial: {fileID: 5678839824051010795, guid: e7c948d60bc756649885610751686142, type: 2}

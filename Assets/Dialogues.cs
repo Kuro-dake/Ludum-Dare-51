@@ -74,7 +74,12 @@ public class Dialogues : MonoBehaviour
                     yield return line.ExecuteCommand();
                     continue;
                 }
-            
+
+                if (line.storymode_only && !Game.story_mode)
+                {
+                    continue;
+                }
+                
                 yield return Make.The(panel_rt).In(change_time * .5f).ScaleTo(1f).Execute();
             
                 yield return Common.WaitForKeyDown(KeyCode.Space);
@@ -111,6 +116,8 @@ public class Dialogues : MonoBehaviour
         public Vector2 pos => new Vector2(x, y);
         private string[] parts;
 
+        public bool storymode_only { get; protected set; }= false;
+        
         public IEnumerator ExecuteCommand()
         {
             string command = parts[0].Substring(1);
@@ -147,7 +154,7 @@ public class Dialogues : MonoBehaviour
                     break;
                 case "sit":
                     Bird.inst.Sit();
-                    break;
+                    break; 
             }
         }
         public bool is_command { get; protected set; }
@@ -176,7 +183,10 @@ public class Dialogues : MonoBehaviour
             ApplyOnIndex((i) =>{
                 y = float.Parse(parts[i]);
             },5);
-            
+            ApplyOnIndex((i) =>
+            {
+                storymode_only = parts[i] == "1";
+            }, 6);
         }
 
         void ApplyOnIndex(System.Action<int> call, int index)

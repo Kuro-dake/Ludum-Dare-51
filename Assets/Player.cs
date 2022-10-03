@@ -85,7 +85,11 @@ public class Player : MonoBehaviour
     public bool fallen = false;
     public void Fall()
     {
-        fallen = true;
+        if (!Game.story_mode)
+        {
+            fallen = true;            
+        }
+        
         Debug.Log($"fell at {DateTime.Now.Second}");
         Game.inst.transform.position = transform.position;
         hp--;

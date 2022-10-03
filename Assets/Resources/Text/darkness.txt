@@ -31,7 +31,6 @@ bye dark bunny|bird|
 ...|buni|
 Go on. I don't mind.|mathbuni|
 Thank you.|buni|
-any time.|mathbuni|
 <size=80%>*shuffles his hands like a maniac*</size>|buni|
 <size=80%>Secret 'Giant Carrot' jutsu:</size>|buni|
 <size=260%>Bunny is going places!</size>|buni|1000|450

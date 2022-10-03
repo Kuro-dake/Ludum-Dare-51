@@ -125,6 +125,8 @@ public class Game : MonoBehaviour
         set => inst._game_started = value;
     }
 
+    public static bool story_mode = false;
+    
     public static bool countdown_over => start_countdown < 1 && game_started;
     public int number_of_glyphs;
     void OnBeat(object sender, OnBeatArgs args)

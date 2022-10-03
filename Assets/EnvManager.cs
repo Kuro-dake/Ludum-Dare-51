@@ -109,7 +109,7 @@ public class EnvManager : MonoBehaviour
     }
 
     public static LandEnvironment current_environment => inst.environments[inst.current_environment_index];
-    [SerializeField] private List<LandEnvironment> environments;
+    [SerializeField] public List<LandEnvironment> environments;
     private int current_environment_index = 0;
     
     [SerializeField] private GameObject game_env;

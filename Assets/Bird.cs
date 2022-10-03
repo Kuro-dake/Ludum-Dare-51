@@ -42,7 +42,7 @@ public class Bird : MonoBehaviour
         flying = true;
         flaping = true;
         Debug.Log("reset bird");
-        transform.position = new Vector2(13.189f, 8.59f);
+        transform.position = (Vector2)Game.inst.transform.position + new Vector2(13.189f, 8.59f);
     }
 
     public void Arrive()
@@ -64,7 +64,7 @@ public class Bird : MonoBehaviour
     public void Leave()
     {
         Vector2 to = (Vector2)transform.position - new Vector2(13.189f, 0f);
-        to.y = 8.59f;
+        to.y = Game.inst.transform.position.y + 8.59f;
         flying = true;
         flaping = true;
         Make.The(gameObject).In(.5f).MoveTo(to).Happen();

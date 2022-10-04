@@ -132,7 +132,7 @@ public class EnvManager : MonoBehaviour
         game_env.SetActive(false);
         switch_game_routine = null;
         game_started = false;
-        Game.music_player.PlayOnly("slow_base;slow_drums;slow_oboe;slow_squeak;magic");
+        Game.music_player.PlayOnly("slow_base;slow_bass;slow_drums;slow_oboe;slow_squeak;magic");
         yield return new WaitForSeconds(1f);
         dialogues.StartDialogue(current_environment.next_dialogue);
 

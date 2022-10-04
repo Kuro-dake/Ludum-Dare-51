@@ -101,7 +101,7 @@ public class Menu : MonoBehaviour
             return;
         }
         
-        if (!ready)
+        if (!ready || starting)
         {
             return;
         }
@@ -110,6 +110,7 @@ public class Menu : MonoBehaviour
         {
             Make.The(text).In(.5f).CGAlphaTo(0f).then.MakeHappen(() => active = false).Happen();
             EnvManager.inst.StartEnvironment();
+            starting = true;
         }
 
         if (Input.GetKeyDown(KeyCode.H))
@@ -122,10 +123,13 @@ public class Menu : MonoBehaviour
                 e.level_moves = 10;
             });
             EnvManager.inst.StartEnvironment();
+            starting = true;
         }
 
         
         
         
     }
+
+    private bool starting = false;
 }

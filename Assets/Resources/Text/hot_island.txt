@@ -24,14 +24,14 @@ That's an amazing idea! He has to know!|buni|
 Just keep in mind that using 'Bunny is going places' to get to and from his domain is a lot trickier than usual traveling.|mathbuni|
 Is it?|buni|
 Indeed! Much more difficult. But you'll manage I'm sure.|mathbuni|
-Actually, scratch that. You're in the story mode, so it should be all the same.|mathbuni|||||Okay|
-1 then! Thank you very much for your help hot bunny.|buni|
+Actually, scratch that. You're in the story mode, so it should be all the same.|mathbuni|||||1|
+Okay then! Thank you very much for your help hot bunny.|buni|
 See you later hot bunny.|bird|
 !music|slow_base;fast_drums;fast_humm;magic;
 Bye bunny! Bye bird!|mathbuni|
 !leave|
 <size=80%>*shuffles his hands like a maniac*</size>|buni|
-You know you don't have to do that every time you go places, right?|mathbuni|
+You know you don't have to do that every time you're going places, right?|mathbuni|
 I know, I know. It's just...|buni|
 Don't let me spoil it for you.|mathbuni|
 Nevermind...|buni|

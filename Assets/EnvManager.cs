@@ -110,7 +110,7 @@ public class EnvManager : MonoBehaviour
 
     public static LandEnvironment current_environment => inst.environments[inst.current_environment_index];
     [SerializeField] public List<LandEnvironment> environments;
-    private int current_environment_index = 0;
+    private int current_environment_index = 4;
     
     [SerializeField] private GameObject game_env;
     IEnumerator EndGameStep()
